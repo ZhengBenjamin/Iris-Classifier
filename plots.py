@@ -6,6 +6,10 @@ import math
 from data_generator import DataGenerator as data
 from network import Network as network 
 
+"""
+This file contains the Output class which is responsible for plotting the data points and decision boundaries
+"""
+
 class Output: 
 
   def __init__(self, k: int, two_classes_only=True) -> None:
@@ -52,6 +56,13 @@ class Output:
     self.plot_over_time()
 
   def surface_plot(self, weights) -> None:
+    """
+    Plots the decision boundary as a surface plot
+
+    Parameters:
+    weights: The weights to use for the surface plot
+    """
+
     x1 = np.linspace(0, 8, 100)
     x2 = np.linspace(0, 3, 100)
     x1, x2 = np.meshgrid(x1, x2)
@@ -77,6 +88,10 @@ class Output:
   def classifier_output(self, data: np.ndarray, weights: np.ndarray) -> np.ndarray:
     """
     Given specific data points, classifies them based on the weights provided
+
+    Parameters:
+    data: The data points to classify
+    weights: The weights to use for classification
     """
 
     output = self.net.output(data, weights)
@@ -97,9 +112,13 @@ class Output:
     """
     Plots the data and the decision boundary
     
-    Optional Parameters:
-    bias: Custom bias for boundaries float
-    weights: Custom weights for boundaries list
+    Parameters:
+    weights: The weights used to classify the data
+    title: The title of the plot
+    points: The points to classify
+    flowers: The actual flowers of data points
+
+    points and flowers only used if different data points are to be classified
     """
     plt.clf()
 
@@ -162,6 +181,15 @@ class Output:
 
 
   def plot_learning_curve(self, error_over_time, title="Learning Curve") -> None: 
+    """
+    Plots the learning curve of the network
+    
+    Parameters:
+    error_over_time: The error over time
+    title: The title of the plot
+
+    Gets error over time from network class
+    """
 
     plt.clf()
 
@@ -183,6 +211,9 @@ class Output:
 
 
   def get_petal_dim(self) -> tuple:
+    """
+    Helper function to get the petal dimensions of the data
+    """
     values = self.data.data_vectors
     x = []
     y = [] 
@@ -198,6 +229,4 @@ class Output:
       
 
 if __name__ == "__main__":
-  Output(2)
-
-    
+  Output(2) # Change the number of clusters / classes
