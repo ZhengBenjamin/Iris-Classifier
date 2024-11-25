@@ -19,6 +19,19 @@ class Output:
     # # Choose boundary that roughly seperates two classes
     self.plot_boundaries(np.array([-5.7, 0.5, 2]), title="Iris Data Guess")
 
+    # Surface plot of the decision boundary
+    self.surface_plot(np.array([-5.7, 0.5, 2]))
+
+    # Example classifier outputs
+    points = np.array([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [5.1, 3.5, 3.5, 5, 4.8, 5.1, 5.2, 5.7, 4.5, 5.5], [1.5, 1, 1.3, 1.2, 1.4, 1.8, 2, 2.5, 1.7, 1.8]])
+    points_actual = ["versicolor", "versicolor", "versicolor", "versicolor", "versicolor", "virginica", "virginica", "virginica", "virginica", "virginica"]
+    classifier_output = self.classifier_output(points, np.array([-5.7, 0.5, 2]))
+
+    for i in range(len(points[0])):
+      print(f"{points[1:, i]} Predicted: {classifier_output[i]} Actual: {points_actual[i]}")
+
+    self.plot_boundaries(weights = np.array([-5.7, 0.5, 2]), points=points, flowers=points_actual, title="Iris Data Classified for 10 Points")
+
     # Compute MSE for two different settings of weights
     weights = np.array([-4, 1, 0.5])
     mse = self.net.mean_squared_error(self.data_vectors, weights, self.data.classes)
@@ -38,6 +51,37 @@ class Output:
     self.net.train()
     self.plot_over_time()
 
+  def surface_plot(self, weights) -> None:
+    x1 = np.linspace(0, 8, 100)
+    x2 = np.linspace(0, 3, 100)
+    x1, x2 = np.meshgrid(x1, x2)
+    data = np.vstack([np.ones(x1.size), x1.ravel(), x2.ravel()])
+    y = self.net.output(data, weights).reshape(x1.shape)
+
+    figure, axes = plt.subplots(subplot_kw={'projection': '3d'})
+    axes.plot_surface(x1, x2, np.transpose(y), cmap='viridis')
+    axes.set_xlabel('Petal Length (cm)')
+    axes.set_ylabel('Petal Width (cm)')
+    axes.set_zlabel('Output (Sigmoid)')
+
+    axes.view_init(elev=20, azim=-60)
+
+    script_dir = os.path.dirname(__file__)
+    res_dir = os.path.join(script_dir, 'outputs/')
+
+    if not os.path.isdir(res_dir):
+      os.makedirs(res_dir)
+
+    plt.savefig(res_dir + "Surface Plot")
+
+  def classifier_output(self, data: np.ndarray, weights: np.ndarray) -> np.ndarray:
+    """
+    Given specific data points, classifies them based on the weights provided
+    """
+
+    output = self.net.output(data, weights)
+    return np.where(output > 0.5, "virginica", "versicolor")
+
   def plot_points(self) -> None:
     """
     Plots the data points
@@ -49,7 +93,7 @@ class Output:
     plt.ylabel('Petal Width (cm)')
     plt.show()
 
-  def plot_boundaries(self, weights, title="Iris Data") -> None:
+  def plot_boundaries(self, weights, title="Iris Data", points=None, flowers=None) -> None:
     """
     Plots the data and the decision boundary
     
@@ -65,7 +109,17 @@ class Output:
 
     bias = weights[0]
 
-    x, y, color = self.get_petal_dim()
+    if points is not None:
+      x = points[1]
+      y = points[2]
+      color = []
+      for flower in flowers:
+        if flower == "versicolor":
+          color.append("green")
+        else:
+          color.append("blue")
+    else:
+      x, y, color = self.get_petal_dim()
 
     plt.scatter(x, y, c=color)
 
