@@ -5,6 +5,10 @@ import random
 
 from data_generator import DataGenerator as data
 
+"""
+This file contains the Network class which is responsible for training the neural network
+"""
+
 class Network: 
   
   def __init__(self) -> None:
@@ -17,6 +21,10 @@ class Network:
 
 
   def random_weights(self) -> np.ndarray:
+    """
+    Random weights are assigned based on min max values of x and y intercepts
+    Guarantees that intiial weights are able to be plotted
+    """
     x_intercept = np.random.uniform(2.5, 7.5)
     y_intercept = np.random.uniform(0.5, 3)
 
@@ -40,6 +48,13 @@ class Network:
     return 1 / (1 + np.exp(-sum))
   
   def train(self, step_size=0.005, iterations=10000, tolerance=1e-6):
+    """
+    Trains the neural network
+    
+    :param step_size: step size
+    :param iterations: number of iterations
+    :param tolerance: tolerance, stops training if error is less than tolerance
+    """
 
     for i in range(iterations):
       new_weights = self.weights - (step_size * self.sum_gradient(self.data_vectors, self.weights))
@@ -95,9 +110,3 @@ class Network:
         sum_gradient[j] += 2 * (sigmoid - actual) * ((np.exp(-np.dot(weight, data_point))) / (1 + np.exp(-np.dot(weight, data_point))) ** 2) * data_point[j]
 
     return sum_gradient
-      
-    
-
-
-if __name__ == "__main__":
-  Network()
