@@ -25,9 +25,8 @@ Using gradient descent, the network adjusts weights to minimize MSE iteratively.
 
 **4. Visualization**
 Plots include:
-
-Decision boundaries separating the two classes.
-Learning curves showing error reduction over training iterations.
+- Decision boundaries separating the two classes.
+- Learning curves showing error reduction over training iterations.
 
 # **Results**
 The trained network effectively classifies data points and produces visually interpretable decision boundaries
