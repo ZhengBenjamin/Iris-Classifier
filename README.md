@@ -1,50 +1,64 @@
-# **Iris Classifier**
+# Neural Network for Iris Dataset Classification
 
-# **Overview**
+This Python script implements a neural network using PyTorch to classify the Iris dataset. The implementation includes data preprocessing, model definition, training, and visualization of decision boundaries.
 
-The Iris Classifier is a Python program that implements a single-layer neural network to classify the Iris dataset into two distinct classes based on petal length and width. It uses sigmoid activation and gradient descent for weight optimization, visualizing the decision boundaries and error reduction throughout training.
+## Overview
 
-# **Features**
+- **Data Preprocessing**: 
+  - The dataset is loaded and species labels are mapped to numerical values (`setosa: 0, versicolor: 1, virginica: 2`).
+  - Features are scaled using `StandardScaler` for normalization.
+  - Data is split into training (70%) and testing (30%) sets.
 
-* Binary Classification: Focuses on differentiating two classes of the Iris dataset (e.g., Versicolor and Virginica).
-* Dynamic Decision Boundaries: Plots boundaries during and after training, showcasing the network's progress.
-* Customizable Training Parameters: Allows adjustments to step size, iterations, and convergence tolerance.
-* Visualization Tools: Includes scatter plots of the dataset and learning curves to monitor performance.
-* Error Metrics: Calculates Mean Squared Error (MSE) to evaluate the model's performance over time.
+- **Model Architecture**:
+  - The model consists of:
+    - Input layer matching the feature size.
+    - Hidden layers with ReLU activation.
+    - Output layer with three nodes for the three classes.
+  - Alternative configurations can include additional layers or different activation functions (e.g., Sigmoid, Tanh, Leaky ReLU).
 
-# **How it works**
+- **Training**:
+  - Optimized using Adam with a learning rate of 0.0005.
+  - Uses CrossEntropyLoss for multi-class classification.
+  - Implements a gradient adjustment to apply extra weight to specific input features.
+  - Logs and plots loss values for both training and testing phases over specified epochs.
 
-**1. Data Preprocessing**
-The program preprocesses the Iris dataset, converting petal length and width into feature vectors. Classes are mapped to binary labels for simplified training.
+- **Visualization**:
+  - Decision boundaries are plotted for specific feature pairs using a mesh grid. 
+  - The boundaries show the regions predicted for each class, overlaid with the actual data points.
 
-**2. Network Initialization**
-The single-layer neural network starts with random weights and a bias term.
+## Example Outputs:
 
-**3. Training**
-Using gradient descent, the network adjusts weights to minimize MSE iteratively. The program stops early if error improvements fall below a predefined tolerance.
+![Decision Boundary for Sepal](https://github.com/user-attachments/assets/61050b1e-be3b-40f5-9132-54e4f2251fe5)
+![Decision Boundary for Petal](https://github.com/user-attachments/assets/a841c1af-0ad6-4b97-b225-704849a84ba1)
+![loss](https://github.com/user-attachments/assets/2e27602e-7d2a-4dd2-825b-0839383ce3c2)
 
-**4. Visualization**
-Plots include:
-- Decision boundaries separating the two classes.
-- Learning curves showing error reduction over training iterations.
+## Key Classes and Functions
 
-# **Results**
-The trained network effectively classifies data points and produces visually interpretable decision boundaries
+### `Data` Class
+Handles data preprocessing tasks, including:
+- Reading and mapping labels in the Iris dataset.
+- Splitting the dataset into input features (`x`) and output labels (`y`).
 
-Visualization of training process:
+### `Model` Class
+Defines the neural network, including:
+- Constructor (`__init__`): Sets up layers, activation functions, and data preprocessing for training/testing sets.
+- `forward`: Propagates input through the network.
+- `train`: Trains the model, adjusts gradients, and plots training/testing loss.
+- `plot`: Visualizes loss over epochs.
 
-![Iris Data Initial](https://github.com/user-attachments/assets/645f0278-2da5-459a-8a0b-372ea9549de8)
-![Iris Data Intermediate](https://github.com/user-attachments/assets/784f3828-a6fa-41ba-94ca-7f8435f262ec) 
-![Iris Data Trained](https://github.com/user-attachments/assets/66a5a221-d1e3-4fa5-8898-de15c962fe8b)
+### `plot_decision_boundaries`
+Visualizes decision boundaries for feature pairs:
+- Generates a mesh grid for the selected features.
+- Maps predictions from the model to grid points and visualizes them.
+- Plots actual data points for reference.
 
-Mean square error as a function of iterations:
-
-![Learning Curve Final](https://github.com/user-attachments/assets/6f8c276e-68fe-45eb-b86a-0f57b7e4066c)
-
-# **Dependencies**
-
-* Python 3.x
-* NumPy
-* Matplotlib
-* Pandas
+## Usage
+1. Ensure the Iris dataset is available as `irisdata.csv`.
+2. Run the script; the following operations are performed:
+   - Model training for 15,000 epochs.
+   - Loss visualization saved as `loss.png`.
+   - Decision boundary plots for:
+     - Sepal features (`Feature 1` vs. `Feature 2`).
+     - Petal features (`Feature 3` vs. `Feature 4`).
+   - Decision boundary plots are saved as `Decision Boundary for Sepal.png` and `Decision Boundary for Petal.png`.
 
